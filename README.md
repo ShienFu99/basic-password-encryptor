@@ -12,7 +12,6 @@ Command to execute program: python basic_encryption_scheme.py
 
 ## Future implementation ideas:
 
-> Prevent list from containing duplicates
 > Saves the encrypt_symbols in a file and takes the user's password. Using command-line arguments, allows the user to input their normal password and convert it to its encrypted form.
 
 Flags:

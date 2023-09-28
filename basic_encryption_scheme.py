@@ -15,27 +15,43 @@ def main():
     normal_symbols = list(chain(list(map(chr, range(97, 123))), list(map(chr, range(65, 90))), range(10)))
     #Normal symbols + special symbols -> ! " # $ % & ' ( ) * + , - . : ; < = > ? [ \ ] ^ _ { | }
     special_symbols = list(chain(list(map(chr, range(33, 47))), list(map(chr, range(58, 64))), list(map(chr, range(91, 96))), list(map(chr, range(123, 126))), normal_symbols))
-    encrypt_symbol = ""
     encrypt_symbols = {}
 
     #Prompts user for a number -> Represents the number of special_symbols to represent each normal_symbols
-    #Reprompts if integer value not inputted
     while True:
         try:
             num_of_symbols = int(input("How many symbols per encrypt_symbol (ie: if 3, \"a\" -> $#@): "))
             break
+        #Reprompts if integer value not inputted
         except ValueError:
             pass
 
-    #Converts each normal symbol to n encrypt_symbols -> n represents num of symbols
+    #Converts each normal symbol into an encrypt_symbols
     for count, ch in enumerate(normal_symbols):
-        for _ in range(num_of_symbols):
-            encrypt_symbol += str(choice(special_symbols))
-        encrypt_symbols[str(ch)] = encrypt_symbol
-        encrypt_symbol = ""
 
+        #Generates an encrypt_symbol of size num_of_symbols
+        encrypt_symbol = generate_encrypt_symbol(num_of_symbols, special_symbols)
+
+        #If the encrypt_symbol is a repeat of a previous one, generate a new one until it's a unique value
+        if encrypt_symbol in encrypt_symbols.values():
+            while encrypt_symbol in encrypt_symbols.values():
+                encrypt_symbol = generate_encrypt_symbol(num_of_symbols, special_symbols)
+
+        #Creates a dictionary entry -> "normal_symbol": "encrypt_symbol"
+        encrypt_symbols[str(ch)] = encrypt_symbol
+
+    #Prints the dictionary of encrypt_symbols
     for key, val in encrypt_symbols.items():
         print(f"{key},{val}")
+
+
+#Write a docstring later -> Randomly pick N symbols from special_symbols and returns the string as an encrypt_symbol
+def generate_encrypt_symbol(num_of_symbols, special_symbols):
+    encrypt_symbol = ""
+    for _ in range(num_of_symbols):
+        encrypt_symbol += str(choice(special_symbols))
+    return encrypt_symbol
+
 
 if __name__ == "__main__":
     main()
