@@ -6,9 +6,11 @@
 """
 
 #Built-in Imports
-import csv
+import argparse
+from csv import DictReader, DictWriter
 from itertools import chain
 from random import choice
+from sys import exit
 
 
 def main():
@@ -16,36 +18,39 @@ def main():
     normal_symbols = list(chain(list(map(chr, range(97, 123))), list(map(chr, range(65, 90))), range(10)))
     #Normal symbols + special symbols -> ! " # $ % & ' ( ) * + , - . : ; < = > ? [ \ ] ^ _ { | }
     special_symbols = list(chain(list(map(chr, range(33, 47))), list(map(chr, range(58, 64))), list(map(chr, range(91, 96))), list(map(chr, range(123, 126))), normal_symbols))
-    special_symbols.remove("\'")
-    special_symbols.remove("\"")
+
+    #encrypt_symbols hold a list of dictionaries -> each dictionary contains the original symbol and the new combination of special_symbols to map it too
     encrypt_symbols = []
 
-    #Prompts user for a number -> Represents the number of special_symbols to represent each normal_symbols
-    while True:
-        try:
-            num_of_symbols = int(input("How many symbols per encrypt_symbol (ie: if 3, \"a\" -> $#@): "))
-            break
-        #Reprompts if integer value not inputted
-        except ValueError:
-            pass
+
+    parser = argparse.ArgumentParser(description="Maps a list of ordinary symbols to a list of \"encrypt_symbols\"")
+    parser.add_argument("-n", default=3, help="number of special_symbols per encrypt_symbol - between 2 and 7 (inclusive)", type=int)
+
+    args = parser.parse_args()
+
+    try:
+        if args.n < 2 or args.n > 7:
+            raise ValueError
+    except ValueError:
+        exit("Number must be between 2 and 7.")
 
     #Converts each normal symbol into an encrypt_symbols
     for count, ch in enumerate(normal_symbols):
 
-        #Generates an encrypt_symbol of size num_of_symbols
-        encrypt_symbol = generate_encrypt_symbol(num_of_symbols, special_symbols)
+        #Generates an encrypt_symbol of size args.n
+        encrypt_symbol = generate_encrypt_symbol(args.n, special_symbols)
 
         #If the encrypt_symbol is a repeat of a previous one, generate a new one until it's a unique value
         for d in encrypt_symbols:
             if encrypt_symbol == d["encrypt_symbol"]:
                 while encrypt_symbol == d["encrypt_symbol"]:
-                    encrypt_symbol = generate_encrypt_symbol(num_of_symbols, special_symbols)
+                    encrypt_symbol = generate_encrypt_symbol(args.n, special_symbols)
 
         #Creates a dictionary entry -> "normal_symbol": "encrypt_symbol"
         encrypt_symbols.append({"normal_symbol": str(ch), "encrypt_symbol": encrypt_symbol})
 
     with open("encrypt_scheme.csv", "w") as new_file:
-        csv_writer = csv.DictWriter(new_file, fieldnames=["normal_symbol", "encrypt_symbol"])
+        csv_writer = DictWriter(new_file, fieldnames=["normal_symbol", "encrypt_symbol"])
         #Prints the dictionary of encrypt_symbols
 
         csv_writer.writeheader()
@@ -53,8 +58,9 @@ def main():
         for d in encrypt_symbols:
             csv_writer.writerow(d)
 
-    with open("encrypt_scheme.csv", "r") as csv_file:
-        csv_reader = csv.DictReader(csv_file)
+    #Opening the file will not throw an exception here as the previous block of code writes a file with the same name
+    with open("encrypt_scheme.csv") as csv_file:
+        csv_reader = DictReader(csv_file)
 
         for line in csv_reader:
             print(line)
