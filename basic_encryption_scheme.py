@@ -13,7 +13,7 @@ from random import choice
 
 def main():
     #List of normal symbols -> the latin alphabet + numbers 0-9
-    normal_symbols = list(chain(list(map(chr, range(97, 123))), range(10)))
+    normal_symbols = list(chain(list(map(chr, range(97, 123))), list(map(chr, range(65, 90))), range(10)))
     #Normal symbols + special symbols -> ! " # $ % & ' ( ) * + , - . : ; < = > ? [ \ ] ^ _ { | }
     special_symbols = list(chain(list(map(chr, range(33, 47))), list(map(chr, range(58, 64))), list(map(chr, range(91, 96))), list(map(chr, range(123, 126))), normal_symbols))
 
