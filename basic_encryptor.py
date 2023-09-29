@@ -30,6 +30,12 @@ def main():
         if file_empty(csv_file):
             generate = True
             csv_file.close()
+        #File is not empty
+        elif args.n != 3 and not args.r:
+            print("An encryption scheme already exists. To generate a new encryption scheme, use the -r flag.")
+            proceed()
+            clear_console()
+            exit()
     except FileNotFoundError:
         generate = True
         if args.r:
@@ -37,7 +43,6 @@ def main():
             proceed()
             clear_console()
             exit()
-
 
     #Opening the filename in "a" mode creates it if it doesn't already exist, allowing it to be checked for file contents
     #If the file is empty or the user wants a new scheme, a new encryption_scheme will be generated and saved to the file
@@ -67,26 +72,27 @@ def main():
         for line in csv_reader:
             encryption_scheme.append({"symbol": line['symbol'], "encrypt_symbol": line['encrypt_symbol']})
 
-    user_message = input("Input a message: ")
-    encrypted_message = ""
+    if args.e:
+        user_message = input("Input a message: ")
+        encrypted_message = ""
 
-    for ch in user_message:
-        for d in encryption_scheme:
-            if ch == d["symbol"]:
-                encrypted_message += d["encrypt_symbol"]
+        for ch in user_message:
+            for d in encryption_scheme:
+                if ch == d["symbol"]:
+                    encrypted_message += d["encrypt_symbol"]
 
-    print(f"Encrypted message: {encrypted_message}")
+        print(f"Encrypted message: {encrypted_message}")
 
-    proceed()
-    clear_console()
+        proceed()
+        clear_console()
 
     #if -d flag inputted -> User can input an encrypted message to decrypt
     if args.d:
-        encrypted_user_message = input("Input an encrypted message (if pasted, avoid copying line breaks): ")
+        encrypted_user_message = input("Input an encrypted message to be decrypted (if pasted, avoid copying line breaks): ")
         print()
         while True:
             try:
-                num_of_symbols = input("How many symbols were used per encrypted_symbol (if -d flag wasn't used, press Enter): ")
+                num_of_symbols = input("How many symbols were used per encrypted_symbol (if -n flag wasn't used, press Enter): ")
                 if not num_of_symbols:
                     num_of_symbols = "3"
                 num_of_symbols = int(num_of_symbols)
@@ -99,7 +105,7 @@ def main():
                 print("Number of symbols does match encryption scheme!")
                 proceed()
                 clear_console()
-                break
+                exit()
 
         #Divides the encrypted_user_message into a list of segments -> Each segment is of length num_of_symbols
         encrypt_symbols = list(map(''.join, zip(*[iter(encrypted_user_message)] * num_of_symbols)))
@@ -111,7 +117,7 @@ def main():
                 if encrypt_symbol ==  d["encrypt_symbol"]:
                     decrypted_user_message += d["symbol"]
 
-        if len(decrypted_user_message) != len(encrypted_user_message):
+        if len(decrypted_user_message) != (len(encrypted_user_message) / num_of_symbols):
             exit("Encrypted message does not match the encryption scheme!")
 
         print(f"Decrypted message: {decrypted_user_message}")
@@ -142,11 +148,14 @@ def proceed():
 def init_command_line_args():
     parser = argparse.ArgumentParser(description="Maps a list of ordinary symbols to a list of \"encrypt_symbols\"")
 
-    group = parser.add_mutually_exclusive_group()
+    #group = parser.add_mutually_exclusive_group()
 
-    group.add_argument("-n", default=3, help="number of symbols per encrypt_symbol - between 2 and 7 (inclusive)", type=int)
-    parser.add_argument("-r", help="reuse previous scheme", action='store_true')
-    group.add_argument("-d", help="decrypt a previously encrypted message", action='store_true')
+    parser.add_argument("-n", default=3, help="number of symbols per encrypt_symbol - between 2 and 7 (inclusive)", type=int)
+    parser.add_argument("-r", help="generate a new encryption scheme", action='store_true')
+    parser.add_argument("-e", help="encrypt a message", action='store_true')
+    parser.add_argument("-d", help="decrypt a previously encrypted message", action='store_true')
+
+    #If -n flag used, use -r flag
 
     args = parser.parse_args()
 

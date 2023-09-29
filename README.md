@@ -18,8 +18,11 @@ Command to execute program: python basic_encryption_scheme.py
 ## Flags:
 > -h -> Prints help
 > -n N -> Sets the number of special_symbols per encrypt_symbol
-       -> Saves the encrypt_symbol scheme to a file
-> -r -> Reuse scheme?
+       -> If no encryption scheme has been saved yet, this flag can be run alone
+       -> If an encryption scheme already exists, this flag must be run with -r to work
+> -r -> Generate a new encryption scheme
+> -e -> Encrypt a message using the current encryption scheme
+     -> If no encryption scheme exists, generates one first
 > -d -> Decrypt a previously encrypted message
 
 
@@ -28,10 +31,10 @@ Command to execute program: python basic_encryption_scheme.py
 > Section program off into different parts depending on the flags used
 
     # Problem: -r being able to run without -n
-    # New flag: -e (encrypt a message) -> Ensure the encryption_scheme gets read in for -d if -e is not run at the same time
 
 > Make more code into functions
 > Add typehints
+> Unit test?
 
 
 
@@ -46,7 +49,7 @@ Command to execute program: python basic_encryption_scheme.py
 
 ---
 
-5. Prompt user for a message -> Encrypts the message
+5. If -e flag used, prompts user for a message to be encrypted
 
 ---
 6. If -d flag used, prompt the user for an encrypted message
