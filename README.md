@@ -23,9 +23,33 @@ Command to execute program: python basic_encryption_scheme.py
 > -d -> Decrypt a previously encrypted message
 
 
-## Future implementation ideas:
+## Future implementation ideas / improvements:
 
-> Take the user's password. Allows the user to input their normal password and convert it to its encrypted form.
 > Section program off into different parts depending on the flags used
+
+    # Problem: -r being able to run without -n
+    # New flag: -e (encrypt a message) -> Ensure the encryption_scheme gets read in for -d if -e is not run at the same time
+
 > Make more code into functions
 > Add typehints
+
+
+
+1. If file can be opened and it's empty, autogenerate an encryption scheme
+    -> Else file can't be opened -> Write a new file + autogenerate an encryption scheme
+---
+2. If -r flag used, prompt if user wants to generate a new encryption scheme
+    3. Empty the file -> Write a new encryption scheme
+---
+
+4. Open the file with the encryption scheme -> save it locally in a variable
+
+---
+
+5. Prompt user for a message -> Encrypts the message
+
+---
+6. If -d flag used, prompt the user for an encrypted message
+    #-> Prompt user for the number of symbols used in the original message (blank = default value)
+    -> Might require the user to input their previous user number (extra security / ensures the decoding process is done correctly)
+    -> If the encryption scheme doesn't match the message or the length is incorrect, print specific messages for the user

@@ -29,9 +29,14 @@ def main():
         csv_file = open("encryption_scheme.csv")
         if file_empty(csv_file):
             generate = True
-        csv_file.close()
+            csv_file.close()
     except FileNotFoundError:
         generate = True
+        if args.r:
+            print("Cannot generate a new encryption scheme while file DNE. Relaunch program without -r flag to generate a file.")
+            proceed()
+            clear_console()
+            exit()
 
 
     #Opening the filename in "a" mode creates it if it doesn't already exist, allowing it to be checked for file contents
@@ -60,20 +65,59 @@ def main():
         csv_reader = DictReader(csv_file)
         encryption_scheme = []
         for line in csv_reader:
-            encryption_scheme.append({"symbols": line['symbol'], "encrypt_symbol": line['encrypt_symbol']})
+            encryption_scheme.append({"symbol": line['symbol'], "encrypt_symbol": line['encrypt_symbol']})
 
     user_message = input("Input a message: ")
     encrypted_message = ""
 
     for ch in user_message:
         for d in encryption_scheme:
-            if ch == d["symbols"]:
+            if ch == d["symbol"]:
                 encrypted_message += d["encrypt_symbol"]
 
     print(f"Encrypted message: {encrypted_message}")
 
     proceed()
     clear_console()
+
+    #if -d flag inputted -> User can input an encrypted message to decrypt
+    if args.d:
+        encrypted_user_message = input("Input an encrypted message (if pasted, avoid copying line breaks): ")
+        print()
+        while True:
+            try:
+                num_of_symbols = input("How many symbols were used per encrypted_symbol (if -d flag wasn't used, press Enter): ")
+                if not num_of_symbols:
+                    num_of_symbols = "3"
+                num_of_symbols = int(num_of_symbols)
+                break
+            except ValueError:
+                pass
+
+        for d in encryption_scheme:
+            if len(d["encrypt_symbol"]) != num_of_symbols:
+                print("Number of symbols does match encryption scheme!")
+                proceed()
+                clear_console()
+                break
+
+        #Divides the encrypted_user_message into a list of segments -> Each segment is of length num_of_symbols
+        encrypt_symbols = list(map(''.join, zip(*[iter(encrypted_user_message)] * num_of_symbols)))
+
+        decrypted_user_message = ""
+
+        for encrypt_symbol in encrypt_symbols:
+            for d in encryption_scheme:
+                if encrypt_symbol ==  d["encrypt_symbol"]:
+                    decrypted_user_message += d["symbol"]
+
+        if len(decrypted_user_message) != len(encrypted_user_message):
+            exit("Encrypted message does not match the encryption scheme!")
+
+        print(f"Decrypted message: {decrypted_user_message}")
+
+        proceed()
+        clear_console()
 
 
 #Working as intended
@@ -97,9 +141,12 @@ def proceed():
 
 def init_command_line_args():
     parser = argparse.ArgumentParser(description="Maps a list of ordinary symbols to a list of \"encrypt_symbols\"")
-    parser.add_argument("-n", default=3, help="number of symbols per encrypt_symbol - between 2 and 7 (inclusive)", type=int)
+
+    group = parser.add_mutually_exclusive_group()
+
+    group.add_argument("-n", default=3, help="number of symbols per encrypt_symbol - between 2 and 7 (inclusive)", type=int)
     parser.add_argument("-r", help="reuse previous scheme", action='store_true')
-    parser.add_argument("-d", help="decrypt a previously encrypted message", action='store_true')
+    group.add_argument("-d", help="decrypt a previously encrypted message", action='store_true')
 
     args = parser.parse_args()
 
