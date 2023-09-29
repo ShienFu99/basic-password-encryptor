@@ -1,21 +1,11 @@
 ## Purpose:
+This program takes a user's message and encrypts it using a simple encryption scheme. The user can input any message that contains symbols from the latin alphabet (case-insensitively), the arabic numerals, or any of the following symbols -> [! " # $ % & ' ( ) * + , - . : ; < = > ? [ \ ] ^ _ { | }]
 
-> First run = generate encryption scheme -> "Encryption scheme saved."
-> Subsequent runs = convert regular password using current encryption scheme
-> *Can also regenerate previous scheme -> Offer a warning to the user
+The encryption scheme is created based on the user-inputted number, else it defaults to 3. This number represents the number of symbols that are randomly combined to create a new "encrypt_symbol". The regular symbols are mapped to these encrypt symbols for future usage. Afterwards, the user has the option to decrypt their message using the previously saved scheme, or generate a new scheme to use. It is important that the original scheme used to encrypt a message is not lost, or it cannot be reobtained.
 
-> How is the scheme saved -> In a regular file -> Stored locally
-> How are passwords stored?
-
-
-
-
-
-This program maps the latin alphabet (uppercase + lowercase) + the arabic numbers into a new list of "encrypt_symbols". Each encrypt_symbol is comprised of n "special_symbols", where n is between 2 and 7.
-
-special_symbols = latin alphabet (uppercase + lowercase) + arabic numbers + [! " # $ % & ' ( ) * + , - . : ; < = > ? [ \ ] ^ _ { | }]
-
-By typing in your regular password, you can get the encrypted form and only have to remember the original version.
+> First run = generate encryption scheme
+> Subsequent runs = Input a message and encrypt it with the previously generated encryption scheme OR decrypt a message using the previously encryption scheme
+> *Can also generate a new scheme -> Offers a warning to the user
 
 
 ## Executing the program:
@@ -24,19 +14,18 @@ Use python or python3 command depending on your installation:
 
 Command to execute program: python basic_encryption_scheme.py
 
-## Future implementation ideas:
 
-> Toggle visibility -> Display as ***** or chars
-> Take the user's password. Allows the user to input their normal password and convert it to its encrypted form.
-
-Flags:
+## Flags:
 > -h -> Prints help
 > -n N -> Sets the number of special_symbols per encrypt_symbol
        -> Saves the encrypt_symbol scheme to a file
 > -r -> Reuse scheme?
+> -d -> Decrypt a previously encrypted message
 
-> Separate generating encryption scheme vs converting password
 
-> If the user wants, they can generate a new list of encrypt_symbols
-> *Do not save the user's password, convert it during runtime so they can copy/paste it*
-> *Backup the encrypt key somehow???*
+## Future implementation ideas:
+
+> Take the user's password. Allows the user to input their normal password and convert it to its encrypted form.
+> Section program off into different parts depending on the flags used
+> Make more code into functions
+> Add typehints
