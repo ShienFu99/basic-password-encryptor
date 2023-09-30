@@ -1,58 +1,36 @@
-## Purpose:
-This program takes a user's message and encrypts it using a simple encryption scheme. The user can input any message that contains symbols from the latin alphabet (case-insensitively), the arabic numerals, or any of the following symbols -> [! " # $ % & ' ( ) * + , - . : ; < = > ? [ \ ] ^ _ { | }]
+# Simple Message Encryptor / Decryptor Built With Python
 
-The encryption scheme is created based on the user-inputted number, else it defaults to 3. This number represents the number of symbols that are randomly combined to create a new "encrypt_symbol". The regular symbols are mapped to these encrypt symbols for future usage. Afterwards, the user has the option to decrypt their message using the previously saved scheme, or generate a new scheme to use. It is important that the original scheme used to encrypt a message is not lost, or it cannot be reobtained.
+## Generates a simple encryption scheme used to encrypt or decrypt user-inputted messages.
 
-> First run = generate encryption scheme
-> Subsequent runs = Input a message and encrypt it with the previously generated encryption scheme OR decrypt a message using the previously encryption scheme
-> *Can also generate a new scheme -> Offers a warning to the user
+This project is command-line based and writes a separate file containing an encryption scheme. The inputtable ASCII symbols (latin alphabet, spaces, Arabic numerals, etc) are individually mapped to a combination of N randomly selected symbols. Then, the user can convert their message into encrypted symbols or convert and encrypted phrase back into plain English. There is also an option to generate a new encryption scheme in the file. *DO NOT LOSE THE ORIGINAL ENCRYPTION SCHEME. IT IS THE ONLY WAY TO DECRYPT A MESSAGE AFTER IT IS ENCRYPTED.* Below is a summary of the flags:
 
+* -h    -> Prints help menu
+* -n N  -> Sets the number of symbols per encrypted symbol (must be between 2 and 7 - default value is 3)
+        -> *If file is empty (does not contain an encryption scheme), this flag can be run alone*
+        -> *If an encryption scheme already exists, this flag must be run with -r to work*
+* -r    -> Generate a new encryption scheme - gives warning first
+* -e    -> Allows the user to input a message to be encrypted using the current encryption scheme
+* -d    -> Allows the user to input an encrypted message to be decrypted with the current encryption scheme
 
-## Executing the program:
+This program can be used practically to create stronger passwords without having to remember them. As long as you keep the encryption scheme and remember a simple password, it can be converted to a very complex password. Ie, hello -> tiO`g)YFk1AEq2iGlt}jjiGlt}jj(0D)Ln6
 
-Use python or python3 command depending on your installation:
+## How to install / use this program:
 
-Command to execute program: python basic_encryption_scheme.py
-
-
-## Flags:
-> -h -> Prints help
-> -n N -> Sets the number of special_symbols per encrypt_symbol
-       -> If no encryption scheme has been saved yet, this flag can be run alone
-       -> If an encryption scheme already exists, this flag must be run with -r to work
-> -r -> Generate a new encryption scheme
-> -e -> Encrypt a message using the current encryption scheme
-     -> If no encryption scheme exists, generates one first
-> -d -> Decrypt a previously encrypted message
-
+1. Install Python (programmed with Python 3.11.3)
+2. Clone the project from GitHub and access the directory from the command-line
+3. Make a virtual environment and install the required package
+    -> python3 -m basic_encryptor_venv
+    -> source basic_encryptor_venv/bin/activate (activate the virtual environment)
+    -> pip install -r requirements.txt
+4. Run the program with the following command
+    -> python basic_encryptor.py - Generates the encryption scheme in a new file called "encryption_scheme.cvs"
+5. For future runs, use the appropriate flags when running the program
+6. When finished using the program deactive the virtual environment
+    -> Run the command: deactivate
 
 ## Future implementation ideas / improvements:
 
-> Section program off into different parts depending on the flags used
-
-    # Problem: -r being able to run without -n
-
+> Make my own version of maskpass so no packages need to be imported -> Adjust the README.md later
 > Make more code into functions
 > Add typehints
 > Unit test?
-
-
-
-1. If file can be opened and it's empty, autogenerate an encryption scheme
-    -> Else file can't be opened -> Write a new file + autogenerate an encryption scheme
----
-2. If -r flag used, prompt if user wants to generate a new encryption scheme
-    3. Empty the file -> Write a new encryption scheme
----
-
-4. Open the file with the encryption scheme -> save it locally in a variable
-
----
-
-5. If -e flag used, prompts user for a message to be encrypted
-
----
-6. If -d flag used, prompt the user for an encrypted message
-    #-> Prompt user for the number of symbols used in the original message (blank = default value)
-    -> Might require the user to input their previous user number (extra security / ensures the decoding process is done correctly)
-    -> If the encryption scheme doesn't match the message or the length is incorrect, print specific messages for the user

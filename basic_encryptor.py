@@ -146,7 +146,6 @@ def main():
         proceed(0)
 
 
-#Working as intended
 #Checks if file is empty
 def file_empty(file):
     #If the first character of the file cannot be read, return True (file is empty), else False
@@ -155,20 +154,19 @@ def file_empty(file):
     return False
 
 
-#Working as intended
 #Clears the console
 def clear_console():
     #Clears the terminal when run
     system("clear")
 
 
-#Working as intended
 #Press enter to continue -> If int_exit is 1, exit the program, else program continues
 def proceed(int_exit):
     choice = askpass("\nPress enter to continue...", mask="")
     clear_console()
     if int_exit:
         exit()
+
 
 #Initializes the command-line args for this specific program
 def init_command_line_args():
@@ -190,7 +188,6 @@ def init_command_line_args():
     return args
 
 
-#Working as intended
 #Clears a file
 def clear_file(file):
     #Makes the file size 0 bytes
@@ -199,7 +196,6 @@ def clear_file(file):
     file.seek(0)
 
 
-#Write a docstring later
 #Randomly pick N symbols from "symbols" list and returns the string as an encrypt_symbol
 #Ie, if N is 3, 'a' -> '%H3'
 def generate_encrypt_symbol(num_of_symbols, symbols):
