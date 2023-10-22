@@ -79,8 +79,12 @@ def main():
 
     #If -e flag run, the user wants to encrypt a message
     if args.e:
-        #Gets message from the user
-        user_message = input("Input a message: ")
+        if args.o:
+            #Gets message from the user - obscures it in the terminal window
+            user_message = getpass("Input a message: ")
+        else:
+            #Gets message from the user
+            user_message = input("Input a message: ")
         encrypted_message = ""
 
         #Compare each symbol from the user-inputted message to the dictionary entries in the encryption_scheme
@@ -172,6 +176,7 @@ def init_command_line_args():
     parser.add_argument("-r", help="generate a new encryption scheme", action='store_true')
     parser.add_argument("-e", help="encrypt a message", action='store_true')
     parser.add_argument("-d", help="decrypt a previously encrypted message", action='store_true')
+    parser.add_argument("-o", help="obscure message in terminal window when you input it", action='store_true')
 
     args = parser.parse_args()
 

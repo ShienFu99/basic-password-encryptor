@@ -11,6 +11,7 @@ This program is run using the command-line. It generates a file containing a sim
 * -r    -> Generate a new encryption scheme - gives warning first
 * -e    -> Allows the user to input a message to be encrypted using the current encryption scheme
 * -d    -> Allows the user to input an encrypted message to be decrypted with the current encryption scheme
+* -o    -> When the user inputs a message to be encrypted, it doesn't show the message in the terminal window
 
 This program can be used to create stronger passwords without having to remember them. As long as you keep the encryption scheme and remember the original password, it can be converted to a very complex password. Ie, hello -> tiO`g)YFk1AEq2iGlt}jjiGlt}jj(0D)Ln6
 
