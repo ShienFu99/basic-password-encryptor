@@ -1,15 +1,11 @@
 #Built-in Imports
 import argparse
 from csv import DictReader, DictWriter
-from itertools import chain #chain() is no longer used
+from getpass import getpass
 from os import system
 from random import choice
 from sys import exit
 from time import sleep
-
-
-#3rd-party Imports
-from maskpass import askpass
 
 
 def main():
@@ -160,9 +156,10 @@ def clear_console():
     system("clear")
 
 
-#Press enter to continue -> If int_exit is 1, exit the program, else program continues
+#Press Enter to continue -> If int_exit is set to 1, exit the program, else program continues
 def proceed(int_exit):
-    choice = askpass("\nPress enter to continue...", mask="")
+    #Hides + discards user input -> Program pauses until the user presses Enter
+    getpass("\nPress enter to continue...")
     clear_console()
     if int_exit:
         exit()
